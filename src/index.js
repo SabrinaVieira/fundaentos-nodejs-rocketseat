@@ -7,12 +7,15 @@ const customers = [];
 
 app.post("/account", (request, respose)=>{
     const { cpf, name } = request.body; //tratando de inserção de dados
-    const id = uuidv4();
+    const cusomerAlreadyExists = customers.some((customers) => customers.cpf === cpf)
 
+    if(cusomerAlreadyExists){
+        return respose.status(400).json({error: "Cliente já existe!"})
+    }
     customers.push({
         cpf,
         name,
-        id,
+        id: uuidv4(),
         statement: []
     })
     return respose.status(201).send()
